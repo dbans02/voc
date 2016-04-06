@@ -146,7 +146,18 @@ public class Float extends org.python.types.Object {
         __doc__ = ""
     )
     public org.python.Object __add__(org.python.Object other) {
-        throw new org.python.exceptions.NotImplementedError("float.__add__() has not been implemented.");
+        if (other instanceof org.python.types.Int) {
+            long other_val = ((org.python.types.Int) other).value;
+            return new org.python.types.Float(this.value + ((double) other_val));
+        } else if (other instanceof org.python.types.Bool) {
+            if (((org.python.types.Bool) other).value) {
+                return new org.python.types.Float(this.value + 1.0);
+            }
+            return new org.python.types.Float(this.value);
+        } else if(other instanceof org.python.types.Float) {
+           return new org.python.types.Float(( this.value) + ((org.python.types.Float) other).value);
+         }
+        throw new org.python.exceptions.TypeError("unsupported operand type(s) for +: 'float' and '" + other.typeName() + "'");
     }
 
     @org.python.Method(
